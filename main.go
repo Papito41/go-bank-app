@@ -2,67 +2,71 @@ package main
 
 import "fmt"
 
-// 1. Defining the "Boxes" (Data Structures)
+// --- YESTERDAY'S BLUEPRINTS ---
 type User struct {
 	Name string
 	ID   int
 }
 
 type Account struct {
-	Owner   User // This connects the User to the Account
-	Balance float64
+	Customer User
+	Balance  float64
 }
 
-// 2. The Factory (Constructor)
-// This fixes the error where you tried to use "InitialBalance" as a type.
-func createAccount(newName string, newID int, startMoney float64) Account {
-	// Create the User first
-	newUser := User{Name: newName, ID: newID}
-
-	// Put that User into the Account
-	newAcc := Account{
-		Owner:   newUser,
-		Balance: startMoney,
+// --- YESTERDAY'S TOOLS ---
+func createAccount(name string, id int, initialBalance float64) Account {
+	return Account{
+		Customer: User{Name: name, ID: id},
+		Balance:  initialBalance,
 	}
-
-	return newAcc // Hand back the finished product
 }
 
-// 3. The Inspector (The View)
-func checkBalance(c Account) {
-	// Reach inside: Account -> Owner -> Name
-	fmt.Printf("Owner: %s | ID: %d | Balance: ₦%.2f\n", c.Owner.Name, c.Owner.ID, c.Balance)
+func deposit(acc *Account, amount float64) {
+	acc.Balance += amount
+	fmt.Printf("Deposited %.2f. New Balance: %.2f\n", amount, acc.Balance)
 }
 
-func deposit(a *Account, amount float64) {
-	a.Balance = a.Balance + amount
-}
-
-func withdraw(a *Account, amount float64) {
-	if amount > a.Balance {
+func withdraw(acc *Account, amount float64) {
+	if amount > acc.Balance {
 		fmt.Println("Insufficient funds!")
-	} else {
-		a.Balance = a.Balance - amount
+		return
 	}
+	acc.Balance -= amount
+	fmt.Printf("Withdrew %.2f. Remaining Balance: %.2f\n", amount, acc.Balance)
 }
 
+// --- TODAY'S SYSTEM (DAY 3) ---
 func main() {
-	// Calling the factory to make your account
-	myAcc := createAccount("Paul", 1, 5000.50)
-	fmt.Println("Initial State:")
-	checkBalance(myAcc)
+	// 1. We create the "Bank" (The Slice/List)
+	var bank []Account
 
-	deposit(&myAcc, 2000.00)
-	fmt.Println("\n After Deposit of 2000.00:")
-	checkBalance(myAcc)
+	// 2. We create individual accounts (Yesterday's work)
+	paul := createAccount("Paul", 1, 5000.0)
+	jane := createAccount("Jane", 2, 3000.0)
 
-	withdraw(&myAcc, 1500.00)
-	fmt.Println("\n After Withdrawal of 1500.00")
-	checkBalance(myAcc)
+	// 3. We "Park" them in the Bank list (Today's work)
+	bank = append(bank, paul)
+	bank = append(bank, jane)
 
-	fmt.Println("\n Testing Insufficient (Attempting 10,000.00):")
-	withdraw(&myAcc, 10000)
+	// This loop "walks" through the bank and gives everyone 1000.0
+	for i := range bank {
+		// 1. &bank[i] gets the address of the person at position 'i'
+		// 2. 1000.0 is the gift amount
+		deposit(&bank[i], 1000.0)
+	}
 
-	// Using the inspector to see it
-	checkBalance(myAcc)
+	// Final check to see the updated balances for everyone
+	fmt.Println("Final Bank State:", bank)
+
+	fmt.Println("--- Welcome to the Bank ---")
+
+	// 4. How to use yesterday's functions on today's list:
+	// We use &bank[0] to give the deposit function Paul's address in the list
+	deposit(&bank[0], 2000)
+
+	// We use &bank[1] to give the withdraw function Jane's address
+	withdraw(&bank[1], 500)
+
+	// 5. Printing the entire bank to see everyone's updated status
+	fmt.Println("\nFinal Bank Registry:", bank)
 }

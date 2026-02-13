@@ -12,6 +12,12 @@ A secure, idiomatic Go implementation of a banking system backend. This project 
 * **State Management:** Used **Pointer Receivers** (`*Account`) to allow functions to modify the actual account balance in memory.
 * **Transaction Guard:** Implemented conditional logic (`if/else`) to prevent overdrafts and ensure "Insufficient Funds" handling.
 
+### Day 3: Scaling to a Banking System
+- **Slices:** Moved from single variables to a dynamic `[]Account` collection to manage multiple users.
+- **Append:** Used the built-in `append` function to dynamically add new customers to the bank registry.
+- **Loops:** Implemented `for range` loops to automate transactions across the entire registry.
+- **Pointers in Slices:** Managed memory addresses within lists to ensure data persistence during bulk updates.
+
 ## 🛠 Tech Stack
 * **Language:** Go (Golang)
 * **Concepts:** Pointers, Structs, Logic Flow, Formatting.
