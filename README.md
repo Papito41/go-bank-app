@@ -18,6 +18,20 @@ A secure, idiomatic Go implementation of a banking system backend. This project 
 - **Loops:** Implemented `for range` loops to automate transactions across the entire registry.
 - **Pointers in Slices:** Managed memory addresses within lists to ensure data persistence during bulk updates.
 
+---
+
+## 📅 Day 4: Data Structure Optimization (The O(1) Upgrade)
+
+Today, I refactored the bank's core storage engine to move away from linear search patterns.
+
+### Technical Achievements:
+- **From O(n) to O(1):** Replaced slice-based storage with **Go Maps**. In a slice, finding a user requires "walking" through every element (Linear Time). With Maps, I implemented a Hash Table approach that allows for **instant** (Constant Time) lookups regardless of whether the bank has 10 users or 10 million.
+- **The "Comma OK" Idiom:** Implemented robust search logic using Go’s `value, ok := map[key]` pattern to handle missing users gracefully without system panics.
+- **Memory Management:** Practiced saving modified data back into the Map, acknowledging that Go Maps return copies of values.
+
+### Why this matters:
+Starting with memory-first optimization ensures that the "hot path" of the application is as fast as possible before introducing the latency of a physical database.
+
 ## 🛠 Tech Stack
 * **Language:** Go (Golang)
 * **Concepts:** Pointers, Structs, Logic Flow, Formatting.
