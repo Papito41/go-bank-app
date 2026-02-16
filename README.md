@@ -32,6 +32,24 @@ Today, I refactored the bank's core storage engine to move away from linear sear
 ### Why this matters:
 Starting with memory-first optimization ensures that the "hot path" of the application is as fast as possible before introducing the latency of a physical database.
 
+Bank App Evolution: Day 5 - The Database Handshake
+
+Today, I moved from storing data in temporary RAM (Go Maps) to preparing for a real-world database (PostgreSQL). 
+
+### 🚀 What's New
+* **Database Driver:** Integrated the `pgx/v5` driver to allow the Go engine to talk to PostgreSQL.
+* **Connection Logic:** Implemented a handshake script (`test_db.go`) to test database reachability using `conn.Ping()`.
+* **Context Management:** Started using Go's `context` package to handle timeouts and prevent the app from hanging if the database is down.
+
+### 🧠 Architectural Shift
+We are moving away from **In-Memory Storage** because:
+1.  **Persistence:** Data needs to survive a server restart.
+2.  **Concurrency:** Maps aren't safe when multiple people withdraw at once (Atomic Transactions are coming next!).
+
+### 🛠 How to Test the Handshake
+1.  Run `go get github.com/jackc/pgx/v5` to install dependencies.
+2.  Run the test script (currently set up as a standalone check).
+
 ## 🛠 Tech Stack
 * **Language:** Go (Golang)
 * **Concepts:** Pointers, Structs, Logic Flow, Formatting.
