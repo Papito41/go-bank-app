@@ -20,7 +20,7 @@ A secure, idiomatic Go implementation of a banking system backend. This project 
 
 ---
 
-## 📅 Day 4: Data Structure Optimization (The O(1) Upgrade)
+##  Day 4: Data Structure Optimization (The O(1) Upgrade)
 
 Today, I refactored the bank's core storage engine to move away from linear search patterns.
 
@@ -41,7 +41,36 @@ Today, I moved from storing data in temporary RAM (Go Maps) to preparing for a r
 * **Connection Logic:** Implemented a handshake script (`test_db.go`) to test database reachability using `conn.Ping()`.
 * **Context Management:** Started using Go's `context` package to handle timeouts and prevent the app from hanging if the database is down.
 
-### 🧠 Architectural Shift
+## Key Architectural Milestones
+## ACID-Compliant Database Transactions (Days 6-7)
+Handling money requires more than simple UPDATE statements. I implemented a custom Store struct to handle Database Transactions (TX).
+
+The Logic: A single "Transfer" involves five distinct database operations (Create Transfer record, Create two Entries, Update two Account balances).
+
+The "Why": Using ACID properties ensures that if any part of the transfer fails, the entire operation rolls back, preventing "phantom money" or lost funds.
+
+## Deadlock Prevention & Concurrency (Days 8-9)
+In a high-traffic bank, two users might transfer money to each other at the exact same millisecond.
+
+The Solution: I implemented Query Locking (SELECT FOR UPDATE) and a strict consistent ordering logic (always updating the account with the smaller ID first).
+
+The "Why": This prevents "Deadlocks," where two database sessions wait on each other forever, freezing the API.
+
+## Deep Unit Testing & Mocking (Days 10-12)
+To ensure 100% reliability, I moved beyond manual Postman tests to automated Golang Unit Tests.
+
+Test-Driven Development: Wrote tests for the store using the testdb and implemented Gomock to mock the database layer for API testing.
+
+The "Why": This allows us to test "Edge Cases" (like insufficient balance or invalid IDs) without actually hitting the real database every time.
+
+## Security & Authentication (Days 13-15)
+The API was "open" to anyone; now it is secured using Paseto (Platform-Agnostic Security Tokens).
+
+Paseto vs JWT: I chose Paseto over JWT for its "stronger-by-default" security and lack of "None" algorithm vulnerabilities.
+
+Middleware: Created a Gin Middleware to intercept every request, verify the token, and extract the Payload to ensure users can only access their own accounts.
+
+### Architectural Shift
 We are moving away from **In-Memory Storage** because:
 1.  **Persistence:** Data needs to survive a server restart.
 2.  **Concurrency:** Maps aren't safe when multiple people withdraw at once (Atomic Transactions are coming next!).
@@ -53,6 +82,8 @@ We are moving away from **In-Memory Storage** because:
 ## 🛠 Tech Stack
 * **Language:** Go (Golang)
 * **Concepts:** Pointers, Structs, Logic Flow, Formatting.
+* **Testing:** Postman
+**Gomock:** Automated generation of mock interfaces for the database store
 
 ## 🏃 How to Run
 1. Ensure you have Go installed on your machine.
