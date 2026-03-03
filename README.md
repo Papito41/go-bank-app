@@ -98,6 +98,7 @@ graph TD
     Store --> DB[(PostgreSQL Docker)]
     DB --> Migrations[Golang-Migrate]
     end
+```
 
 ## 🏃 How to Run
 1. Ensure you have Go installed on your machine.
