@@ -84,6 +84,20 @@ We are moving away from **In-Memory Storage** because:
 * **Concepts:** Pointers, Structs, Logic Flow, Formatting.
 * **Testing:** Postman
 **Gomock:** Automated generation of mock interfaces for the database store
+  ### 🏗️ System Architecture
+
+```mermaid
+graph TD
+    Client[Postman / Frontend] -->|HTTP/JSON| API[Gin Web Framework]
+    subgraph "Go Backend Server"
+    API --> Middleware[Paseto Auth Middleware]
+    Middleware --> Handlers[API Handlers]
+    Handlers --> Store[SQLC Data Access Layer]
+    end
+    subgraph "Database Layer"
+    Store --> DB[(PostgreSQL Docker)]
+    DB --> Migrations[Golang-Migrate]
+    end
 
 ## 🏃 How to Run
 1. Ensure you have Go installed on your machine.
