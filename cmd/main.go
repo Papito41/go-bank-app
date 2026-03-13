@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"my-bank-app/api"
-	"my-bank-app/db/sqlc"
+	db "my-bank-app/db/sqlc"
 
 	_ "github.com/lib/pq"
 )
@@ -16,7 +16,7 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
-	store := sqlc.NewStore(conn)
+	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
 	log.Println("Bank Server starting on port 8080...")

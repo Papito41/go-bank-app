@@ -1,4 +1,4 @@
-package sqlc
+package db
 
 import (
 	"database/sql"
@@ -11,7 +11,7 @@ type Store struct {
 
 func NewStore(dbConn *sql.DB) *Store {
 	return &Store{
-		Queries: NewQueries(dbConn),
+		Queries: New(dbConn),
 		db:      dbConn,
 	}
 }
