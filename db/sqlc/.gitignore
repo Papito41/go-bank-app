@@ -1,0 +1,9 @@
+# Ignore all HTML files to fix GitHub stats
+*.html
+!portfolio.html
+
+# Ignore the executable binary Go creates
+my-bank-app
+
+# Ignore environment variables (very important for security!)
+*.env
